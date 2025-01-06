@@ -13,6 +13,8 @@ class tools:
              'Pc', 'Uniformes', 'Pinturas', 'Pinceles', 'Papel', 'Cartulinas']
 
     def definiciones():
+        """Funcion para crera la base de datos y la tabla que ocuparemos para
+        almacenar la infomacion simulada de las ventas"""
         import sqlite3 as sql
         
         # Creamos la base de datos en caso de que no exista
@@ -60,8 +62,10 @@ class tools:
         # Establecemos una fecha de venta
         fecha_reporte = date
 
-        # importamos los catalogos
+        # importamos los catalogos que tienen la asociacion
+        # clave_producto--->nombre del producto
         df_claves = pd.read_excel('Catalogo_Claves.xlsx')
+        # clave_producto--->precio del producto
         df_p = pd.read_excel('Catalogo_Precios.xlsx')
         
         productos = []
@@ -141,20 +145,30 @@ class tools:
         print(f"Inserción existosa")
         
     def proceso(fecha_ini, fecha_fin=None):
+        """Metodo en el cual simulamos la informacion de las ventas y adicionalmente realizamos
+        las inserciones. Se podra generar informacion de un solo dia o informacion de 
+        todo un rango de fechas."""
+
         import pandas as pd
         import time as t
         
         inicio_total = t.time()
         
+        # Caso en el cual solo es una fecha en la cual se desea generar
         if fecha_fin is None:
             inicio = t.time()
+            # generamos
             df = tools._generar_info(fecha_ini)
+            # Insertamos
             tools._inserciones_mult(df)
             fin = t.time()
             
             print(f'Fecha: {fecha_ini} || Tiempo de ejecución: {round((fin - inicio) / 60, 2)} minutos')
+        # Caso en el que se desea generar la infomracion de todo un rango de fechas
         else:
+            # generamos el rango con pandas
             rango = pd.DataFrame(pd.date_range(fecha_ini, fecha_fin))
+            # Convertimos el rango anterior a strings
             rango[0] = rango[0].apply(str).apply(lambda x: x[:10])
 
             for i in range(len(rango)):
