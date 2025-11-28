@@ -112,12 +112,10 @@ class tools:
     import pandas as pd
     import sqlite3 as sql
     import random as r
+    import datetime as dt
+    
     ##################################################################################
     def rangoFecha(fechaInicial, fechaFinal):
-      import pandas as pd
-      import sqlite3 as sql
-      import random as r
-
       rangoObjetosFecha = pd.date_range(start=fechaInicial, end=fechaFinal, freq="1d")
       rangoStrFecha = []
       for objFecha in rangoObjetosFecha:
